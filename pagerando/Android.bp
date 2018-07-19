@@ -1,0 +1,51 @@
+// Pagerando tests
+
+cc_defaults {
+    name: "pagerando_defaults",
+    pagerando: true,
+    cflags: [
+        "-fno-inline",
+    ],
+    gtest: false,
+    target: {
+        android: {
+            ldflags: [
+                "-Wl,--rpath,${ORIGIN}/../",
+            ]
+        }
+    },
+}
+
+cc_test_library {
+    defaults: ["pagerando_defaults"],
+    name: "libtest_pagerando",
+    srcs: ["pagerando_test.c",
+           "varargs.c",
+           "tls.c",
+           "pthread_fnpointer.c"],
+}
+
+cc_test_library {
+    defaults: ["pagerando_defaults"],
+    name: "libtest_pagerando2",
+    srcs: ["pagerando_test2.c"],
+    shared_libs: [
+        "libtest_pagerando",
+    ],
+}
+
+cc_test {
+    defaults: ["pagerando_defaults"],
+    name: "test_pagerando",
+    srcs: ["main.c"],
+    shared_libs: [
+        "libtest_pagerando",
+        "libtest_pagerando2",
+    ],
+}
+
+cc_test_library {
+    defaults: ["pagerando_defaults"],
+    name: "libtest_pagerando_cpp",
+    srcs: ["pagerando_test.cpp"],
+}
